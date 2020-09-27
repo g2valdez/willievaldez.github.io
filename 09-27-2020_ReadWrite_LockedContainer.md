@@ -1,4 +1,5 @@
-# Thread Contention in C++
+# 09-27-2020 A simple Read-Write Locked Container
+## Thread Contention in C++
 A huge sticking point in multi-threaded programming is concurrent access of the same variable.
 The simple solution to this problem is to create a mutex, and lock the mutex in any part of code
 that touches your "danger" variable. A slightly more sophisticated access pattern is the 
@@ -6,12 +7,12 @@ that touches your "danger" variable. A slightly more sophisticated access patter
 any number of threads can read from a variable at the same time, but only one thread can write 
 to a variable at any time. When the "write-lock" is acquired, "read-locks" cannot be acquired either.
 
-# The Problem with the Solution
+## The Problem with the Solution
 The perfect programmer will always accompany any accesses of this "danger" variable with the proper
 lock acquisition. The imperfect programmer (read: me) might miss one or two areas of code that access
 the variable. So, I decided to dummy-proof the read-write lock access pattern.
 
-# The Implementation
+## The Implementation
 I wanted to write a container that can hold any data type, and exposes a "Get" (read) and an "Access" (write).
 The object returned by "Get" will acquire a read lock throughout the lifetime of its existence, and likewise,
 the object returned by "Access" will acquire a write lock.
@@ -89,7 +90,7 @@ Or, if you were simply setting the variable, you can do a quick write lock like 
 m_sharedInt = 0;
 ```
 
-# Testing
+## Testing
 I wrote a quick main function that tested this access pattern. It spawns 200 threads, every 10 of which are write functions. The rest are read functions.
 At the end, I print the contents of the variable, and the time (in microseconds) it took to acquire the lock.
 ```
