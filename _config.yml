@@ -14,11 +14,8 @@ author: Willie Valdez
 # --- List of links in the navigation bar --- #
 
 navbar-links:
+  Blog: ""
   About Me: "aboutme"
-  Resources:
-    - Beautiful Jekyll: "https://beautifuljekyll.com"
-    - Learn markdown: "https://www.markdowntutorial.com/"
-  Author's home: "https://deanattali.com"
 
 # --- Logo --- #
 
@@ -42,11 +39,11 @@ social-network-links:
   email: "williev814@gmail.com"
 #  facebook: deanattali
   github: willievaldez
-  twitter: daattali
-  linkedin: daattali
+#  twitter: daattali
+  linkedin: guillermo-valdez
 #  reddit: yourname
 #  xing: yourname
-#  stackoverflow: "3943160/daattali"
+  stackoverflow: "6591096/willie-valdez"
 #  snapchat: deanat78
 #  instagram: deanat78
 #  youtube: user/deanat78
@@ -76,7 +73,7 @@ share-links-active:
 
 # How to display the link to your website in the footer
 # Remove this if you don't want a link in the footer
-url-pretty: "MyWebsite.com"
+# url-pretty: "MyWebsite.com"
 
 # Excerpt word length - Truncate the excerpt of each post on the feed page to the specified number of words
 excerpt_length: 50
