@@ -1,4 +1,10 @@
-# 2020-09-27 A Simple Read-Write Locked Container
+---
+title: A Simple Read-Write Locked Container
+categories:
+- General
+feature_image: "https://picsum.photos/2560/600?image=872"
+---
+
 ## Thread Contention in C++
 A huge sticking point in multi-threaded programming is concurrent access of the same variable.
 The simple solution to this problem is to create a mutex, and lock the mutex in any part of code
