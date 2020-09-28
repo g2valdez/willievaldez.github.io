@@ -1,8 +1,7 @@
 ---
+layout: post
 title: A Simple Read-Write Locked Container
-categories:
-- General
-feature_image: "https://picsum.photos/2560/600?image=872"
+tags: [cpp, multithreading]
 ---
 
 ## Thread Contention in C++
