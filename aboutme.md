@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About me
-subtitle: Why you'd want to go on a date with me
+subtitle: Or how I learned to like myself in apocalyptic circumstances
 ---
 
 My name is Inigo Montoya. I have the following qualities:
