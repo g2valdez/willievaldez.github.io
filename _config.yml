@@ -14,8 +14,11 @@ author: Willie Valdez
 # --- List of links in the navigation bar --- #
 
 navbar-links:
-  Blog: ""
   About Me: "aboutme"
+  Social Media:
+    - GitHub: https://github.com/willievaldez
+    - LinkedIn: https://www.linkedin.com/in/guillermo-valdez
+    - StackOverflow: https://stackoverflow.com/users/6591096/willie-valdez
 
 # --- Logo --- #
 
@@ -215,8 +218,6 @@ exclude:
   - Gemfile.lock
   - LICENSE
   - README.md
-  - screenshot.png
-  - docs/
 
 plugins:
   - jekyll-paginate
