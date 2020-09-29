@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [WIP] Automatic Registration of Classes
+title: (WIP) Automatic Registration of Classes
 subtitle: Tricking C++ to do your bidding
 tags: [cpp, oop]
 ---
