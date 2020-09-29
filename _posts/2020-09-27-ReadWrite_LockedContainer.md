@@ -23,7 +23,7 @@ The object returned by "Get" will acquire a read lock throughout the lifetime of
 the object returned by "Access" will acquire a write lock.
 
 Here's LockedContainer.h
-```
+```cpp
 #pragma once
 #include <shared_mutex>
 #include <mutex>
@@ -79,26 +79,26 @@ private:
 ```
 
 Awesome! Now, if you wanted to declare a lock-protected int, as a member variable of a class, you declare it like this:
-```
+```cpp
 LockedContainer<int> m_sharedInt;
 ```
 And if you want to read-lock a section of your code, you call this:
-```
+```cpp
 LockedContainer<int>::ReadContainer container = m_sharedInt.Get();
 ```
 Similarly, a write-lock would look like this:
-```
+```cpp
 LockedContainer<int>::WriteContainer container = m_sharedInt.Access();
 ```
 Or, if you were simply setting the variable, you can do a quick write lock like this:
-```
+```cpp
 m_sharedInt = 0;
 ```
 
 ## Testing
 I wrote a quick main function that tested this access pattern. It spawns 200 threads, every 10 of which are write functions. The rest are read functions.
 At the end, I print the contents of the variable, and the time (in microseconds) it took to acquire the lock.
-```
+```cpp
 #include "LockedContainer.h"
 #include <iostream>
 #include <thread>
