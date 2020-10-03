@@ -55,7 +55,7 @@ std::shared_ptr<Enemy> Spawner::Spawn()
 }
 ```
 
-*BUT* we have to populate that map somehow, right? This usually leads to a big ugly function definition in a cpp file that looks like this (We'll call it Code Chunk A):
+*BUT* we have to populate that map somehow, right? This usually leads to a big ugly function definition in a cpp file that looks like this:
 ```cpp
 #include <Goomba.h>
 // ... lots of includes here
@@ -93,7 +93,7 @@ Now, inside of an enemy source file, say, `Goomba.cpp`, we can add
 ```cpp
 REGISTER_ENEMY_TYPE(Goomba);
 ```
-and viola, we have a self registering type system! Right? Well almost. We can't gurantee which static variables are intialized first, and it is possible that we call `AddSpawnerType` before initializing `s_enemyTypeMap`, so we can write an accessor and guarantee that `s_enemyTypeMap` is initialized before it gets accessed.
+and viola, we have a self registering type system! Right? Well almost. We can't gurantee which static variables are intialized first, and it is possible that we call `RegisterEnemyType()` before initializing `s_enemyTypeMap`, so we can write an accessor and guarantee that `s_enemyTypeMap` is initialized before it gets accessed.
 
 Here's the final version of `Enemy.h`:
 ```cpp
