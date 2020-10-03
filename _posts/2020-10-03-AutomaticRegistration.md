@@ -48,7 +48,7 @@ std::shared_ptr<Enemy> Spawner::Spawn()
     auto& foundEnemy = Enemy::s_enemyTypeMap.find(m_enemyType);
     if (foundEnemy != Enemy::s_enemyTypeMap.end())
     {
-        spawnedEnemy = (*foundEnemy)();
+        spawnedEnemy = foundEnemy->second();
     }
 
     return spawnedEnemy;
@@ -69,11 +69,11 @@ std::shared_ptr<Enemy> Spawner::Spawn()
 }
 ```
 This implementation sucks because:
-* Whenever we make a new Enemy class, we can't forget to add an entry in to RegisterEnemyTypes
-* Modifying any derived Enemy header file forces us to recompile this source file every time
+* Whenever we make a new `Enemy` class, we can't forget to add an entry in to `RegisterEnemyTypes`
+* Modifying any derived `Enemy` header file forces us to recompile this source file every time
 
 ## The Better Way To Do It
-Wouldn't it be cool if each derived Enemy class could register itself to s_enemyTypeMap? We can add a static function to `Enemy` that adds an entry to its EnemyType map.
+Wouldn't it be cool if each derived Enemy class could register itself to `s_enemyTypeMap`? We can add a static function to `Enemy` that adds an entry to its EnemyType map.
 ```cpp
     template<typename T>
     static void RegisterEnemyType(const char* typeName)
@@ -83,7 +83,7 @@ Wouldn't it be cool if each derived Enemy class could register itself to s_enemy
     }
 ```
 
-Now how do we get each class to call `RegisterEnemyType`? If only we could call a function in the static space of a source file. Well, we can! we just have make  `RegisterEnemyType` return a value. Make a macro that constructs a static value with our function call like this:
+Now how do we get each class to call `RegisterEnemyType`? If only we could call a function in the static space of a source file. Well, we can! We just have make  `RegisterEnemyType()` return a value. Let's make a macro that constructs a static value with our function call like this:
 ```cpp
 #define REGISTER_ENEMY_TYPE(CLASS) size_t g_enemyNum##__COUNTER__ = Enemy::RegisterEnemyType<CLASS>(#CLASS)
 ```
