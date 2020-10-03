@@ -14,7 +14,7 @@ Each name correlates to an explicit AI class derived from a base class `Enemy`.
 
 ## The Wrong Way(s) To Do It
 When loading the CSV, cache the spawn type in the spawner as a member variable `std::string m_enemyType`.
- Inside of `Spawner::Spawn()`, you can implement this god awful monstrosity:
+ Inside of `Spawner::Spawn()`, we can implement this god awful monstrosity:
 ```cpp
 std::shared_ptr<Enemy> Spawner::Spawn()
 {
@@ -55,7 +55,7 @@ std::shared_ptr<Enemy> Spawner::Spawn()
 }
 ```
 
-*BUT* we have to populate that map somehow, right? This usually leads to a big ugly function definition in a cpp file that looks like this (We'll call it Exhibit A):
+*BUT* we have to populate that map somehow, right? This usually leads to a big ugly function definition in a cpp file that looks like this (We'll call it Code Chunk A):
 ```cpp
 #include <Goomba.h>
 // ... lots of includes here
@@ -68,10 +68,9 @@ std::shared_ptr<Enemy> Spawner::Spawn()
     s_enemyTypeMap["Koopa"] = &std::make_shared<Koopa>;
 }
 ```
-
-Then, before we load our level file, we can call `Enemy::RegisterSpawnTypes()`. Simple, right? WRONG. This implementation sucks because:
-* Whenever you make a new Enemy class, you can't forget to add an entry in to RegisterEnemyTypes
-* Modifying any derived Enemy header file forces you to recompile this source file every time
+This implementation sucks because:
+* Whenever we make a new Enemy class, we can't forget to add an entry in to RegisterEnemyTypes
+* Modifying any derived Enemy header file forces us to recompile this source file every time
 
 ## The Better Way To Do It
 Wouldn't it be cool if each derived Enemy class could register itself to s_enemyTypeMap? We can add a static function to `Enemy` that adds an entry to its EnemyType map.
@@ -84,17 +83,17 @@ Wouldn't it be cool if each derived Enemy class could register itself to s_enemy
     }
 ```
 
-Now how do we get each class to call `RegisterEnemyType`? If we make a static `Register` function, we'd still have a list of includes and `Register` calls akin to the big ugly function definition file like Exhibit A. If only we could call a function in the static space of a source file. Well, we can! we just have make  `RegisterEnemyType` return a value. Make a macro that constructs a static value with our function call like this:
+Now how do we get each class to call `RegisterEnemyType`? If we make a static `Register` function for each derived class, we'd still have a list of includes and `Register` calls akin to the big ugly function definition file like Code Chunk A. If only we could call a function in the static space of a source file. Well, we can! we just have make  `RegisterEnemyType` return a value. Make a macro that constructs a static value with our function call like this:
 ```cpp
 #define REGISTER_ENEMY_TYPE(CLASS) size_t g_enemyNum##__COUNTER__ = Enemy::RegisterEnemyType<CLASS>(#CLASS)
 ```
-We append `\_\_COUNTER\_\_` to the variable name to prevent the compiler from collapsing our static variables.
+We append `__COUNTER__` to the variable name to prevent the compiler from collapsing our static variables.
 
 Now, inside of an enemy source file, say, `Goomba.cpp`, we can add
 ```cpp
 REGISTER_ENEMY_TYPE(Goomba);
 ```
-and viola, we have a self registering type system! Right? Well almost. We can't gurantee which static variables are intialized first, and its possible that we call `AddSpawnerType` before initializing `s_enemyTypeMap`, so we can write an accessor and guarantee that `s_enemyTypeMap` is initialized before it is used.
+and viola, we have a self registering type system! Right? Well almost. We can't gurantee which static variables are intialized first, and it is possible that we call `AddSpawnerType` before initializing `s_enemyTypeMap`, so we can write an accessor and guarantee that `s_enemyTypeMap` is initialized before it gets accessed.
 
 Here's the final version of `Enemy.h`:
 ```cpp
@@ -145,3 +144,5 @@ private:
 #define REGISTER_ENEMY_TYPE(CLASS) size_t g_enemyNum##__COUNTER__ = Enemy::RegisterEnemyType<CLASS>(#CLASS);
 
 ```
+
+Pretty slick usage pattern at the expense of a little boilerplate. Not a bad trade off, if you ask me.
