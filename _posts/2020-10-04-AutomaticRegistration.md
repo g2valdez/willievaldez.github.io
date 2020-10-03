@@ -13,7 +13,7 @@ Each name correlates to an explicit AI class derived from a base class `Enemy`.
 
 
 ## The Wrong Way(s) To Do It
-When loading the CSV, cache the spawn type in the spawner as a member variable `std::string m_enemyType`.
+When loading the CSV, we can cache the spawn type in the spawner as a member variable `std::string m_enemyType`.
  Inside of `Spawner::Spawn()`, we can implement this god awful monstrosity:
 ```cpp
 std::shared_ptr<Enemy> Spawner::Spawn()
@@ -83,7 +83,7 @@ Wouldn't it be cool if each derived Enemy class could register itself to s_enemy
     }
 ```
 
-Now how do we get each class to call `RegisterEnemyType`? If we make a static `Register` function for each derived class, we'd still have a list of includes and `Register` calls akin to the big ugly function definition file like Code Chunk A. If only we could call a function in the static space of a source file. Well, we can! we just have make  `RegisterEnemyType` return a value. Make a macro that constructs a static value with our function call like this:
+Now how do we get each class to call `RegisterEnemyType`? If only we could call a function in the static space of a source file. Well, we can! we just have make  `RegisterEnemyType` return a value. Make a macro that constructs a static value with our function call like this:
 ```cpp
 #define REGISTER_ENEMY_TYPE(CLASS) size_t g_enemyNum##__COUNTER__ = Enemy::RegisterEnemyType<CLASS>(#CLASS)
 ```
