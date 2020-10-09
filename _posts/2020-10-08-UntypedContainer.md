@@ -1,9 +1,11 @@
 ---
 layout: post
-title: (WIP) An Untyped Container
-subtitle: If you sometimes wish C++ was a little more like JavaScript
+title: A Typeless Container
+subtitle: For when you sometimes wish C++ was a little more like JavaScript
 tags: [cpp, oop]
 ---
+Do silly constructs like "classes" sometimes get in the way of your programming? Are loosely typed languages "too loose" for you? Well boy, do I have a blog post for you! I was fiddling around with my OpenGL game engine and decided to make a container that can store and run custom functions on any object type.
+
 ## The Background
 In OpenGL, you feed variables to the shader by making calls like this:
 ```cpp
@@ -53,7 +55,7 @@ protected:
 	std::string m_uniformName;
 };
 ```
-Okay, now let's make the templated version:
+Okay, now let's make the templated version, which stores an arbitrary data type and defines the per-type `SetUniform` function:
 ```cpp
 template<typename T>
 class TemplatedUniformWrapper : public UniformWrapper
@@ -68,7 +70,6 @@ private:
 	const T& m_data;
 };
 ```
-
 Finally, let's make a class that can store many uniform wrappers. (I used a vector as a container, you can use anything you want!)
 ```cpp
 class UniformContainer
@@ -88,7 +89,7 @@ private:
 ```
 
 ## The Usage
-Now we just have to make definitions for the template specializations of `SetUniform`. In a separate cpp file, just write out the implementation for various supported types:
+Now we just have to make template specializations for `SetUniform`. In a separate cpp file, just write out the implementation for various supported types:
 ```cpp
  // mat4
 void TemplatedUniformWrapper<glm::mat4>::SetUniform(unsigned int shaderProgram) const
@@ -134,4 +135,11 @@ uniforms.AddObject("objCenter", glm::vec3(1.0f, 3.0f, 5.0f));
 uniforms.AddObject("animationFrame", 2);
 m_asset->Render(uniforms);
 ```
+Inside of `Asset::Render`, add a call to `uniforms.SetUniforms()`, and you're ready to roll.
 
+## Reinventing the Wheel?
+If you want a typeless container, why not just use an `std::vector<void*>` or [boost::any](https://www.boost.org/doc/libs/1_48_0/doc/html/boost/any.html)?
+The problem with `void*` is that it's *too* loosely typed. After casting something to a `void*` it's virtually impossible to get the original object type. At that point, I wouldn't be able to run specialized functions based on the object's type.
+I personally have an aversion of any kind of `if (type1) doStuff(); else if (type2) doOtherStuff();` code, and if I wanted to iterate through an `std::vector<boost::any>`, some form of that code would be implemented.
+
+More importantly, I enjoy making these things. Even if there is a better, more optimal out-of-the-box implementation, I get those sweet sweet dopamine hits when I successfully implement this kind of stuff.
