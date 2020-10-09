@@ -142,4 +142,4 @@ If you want a typeless container, why not just use an `std::vector<void*>` or [b
 The problem with `void*` is that it's *too* loosely typed. After casting something to a `void*` it's virtually impossible to get the original object type. At that point, I wouldn't be able to run specialized functions based on the object's type.
 I personally have an aversion of any kind of `if (type1) doStuff(); else if (type2) doOtherStuff();` code, and if I wanted to iterate through an `std::vector<boost::any>`, some form of that code would be implemented.
 
-More importantly, I enjoy making these things. Even if there is a better, more optimal out-of-the-box implementation, I get those sweet sweet dopamine hits when I successfully implement this kind of stuff.
+More importantly, I enjoy making these things. Even if there is a better, more optimal out-of-the-box implementation, I get those sweet sweet dopamine hits when I get stuff like this actually working.
