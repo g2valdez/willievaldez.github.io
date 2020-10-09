@@ -4,7 +4,7 @@ title: (WIP) An Untyped Container
 subtitle: If you sometimes wish C++ was a little more like JavaScript
 tags: [cpp, oop]
 ---
-##The Background
+## The Background
 In OpenGL, you feed variables to the shader by making calls like this:
 ```cpp
 // mat4
@@ -36,12 +36,12 @@ glUniform1i(usesTexId, usesTexture);
 
 In order to keep my code base tidy, I wanted to isolate this process of setting "[uniforms](https://www.khronos.org/opengl/wiki/Uniform_%28GLSL%29)" into a single function. I quickly realized that, unless I wanted to overload the crap out of my `Asset::Render` function signature, I would need something generic to pass into the function, which it could understand and be able to set shader uniforms, uhmm... uniformly.
 
-##The Goal
+## The Goal
 I want a class that can be used as a *single* parameter in my `Asset::Render` function.
 This class contains an array of objects that are instances of multiple different types.
 This class should be easy to add to, and easy to process. I don't want a huge `if/else if` block that checks the type of the object, and then runs the right `glUniform*` function call.
 
-##The Design
+## The Design
 Let's start by making a simple non-templated class. Our container of objects will consist of pointers to this type
 ```cpp
 class UniformWrapper
@@ -87,7 +87,7 @@ private:
 };
 ```
 
-##The Usage
+## The Usage
 Now we just have to make definitions for the template specializations of `SetUniform`. In a separate cpp file, just write out the implementation for various supported types:
 ```cpp
  // mat4
