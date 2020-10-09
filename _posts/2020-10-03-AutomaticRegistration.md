@@ -61,11 +61,20 @@ std::shared_ptr<Enemy> Spawner::Spawn()
 // ... lots of includes here
 #include <Koopa.h>
 
+// define a function who's signature matches "std::shared_ptr<Enemy>(*)()"
+template<typename T>
+std::shared_ptr<Enemy> EnemyFactory()
+{
+    return std::make_shared<T>();
+}
+
 /*static*/ void Enemy::RegisterEnemyTypes()
 {
-    s_enemyTypeMap["Goomba"] = &std::make_shared<Goomba>;
+    s_enemyTypeMap["Goomba"] = &EnemyFactory<Goomba>;
+
     // ... lots of map insertions here
-    s_enemyTypeMap["Koopa"] = &std::make_shared<Koopa>;
+    s_enemyTypeMap["Koopa"] = &EnemyFactory<Koopa>;
+
 }
 ```
 This implementation sucks because:
@@ -75,12 +84,12 @@ This implementation sucks because:
 ## The Better Way To Do It
 Wouldn't it be cool if each derived Enemy class could register itself to `s_enemyTypeMap`? We can add a static function to `Enemy` that adds an entry to its EnemyType map.
 ```cpp
-    template<typename T>
-    static void RegisterEnemyType(const char* typeName)
-    {
-        auto foundType = s_enemyTypeMap.find(typeName);
-        s_enemyTypeMap[typeName] = &std::make_shared<T>;
-    }
+template<typename T>
+static void RegisterEnemyType(const char* typeName)
+{
+    auto foundType = s_enemyTypeMap.find(typeName);
+    s_enemyTypeMap[typeName] = &EnemyFactory<T>;
+}
 ```
 
 Now how do we get each class to call `RegisterEnemyType`? If only we could call a function in the static space of a source file. Well, we can! We just have make  `RegisterEnemyType()` return a value. Let's make a macro that constructs a static value with our function call like this:
@@ -103,6 +112,13 @@ Here's the final version of `Enemy.h`:
 #include <memory>
 #include <string>
 
+class Enemy;
+template<typename T>
+std::shared_ptr<Enemy> EnemyFactory()
+{
+    return std::make_shared<T>();
+}
+
 class Enemy
 {
 public:
@@ -117,7 +133,7 @@ public:
         EnemyTypeMap& enemyTypes = AccessEnemyTypes();
         auto foundType = enemyTypes.find(typeName);
         assert(foundType == enemyTypes.end());
-        enemyTypes[typeName] = &std::make_shared<T>;
+        enemyTypes[typeName] = &EnemyFactory<T>;
         return enemyTypes.size();
     };
 
