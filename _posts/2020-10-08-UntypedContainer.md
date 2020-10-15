@@ -91,7 +91,7 @@ private:
 ## The Usage
 Now we just have to make template specializations for `SetUniform`. In a separate cpp file, just write out the implementation for various supported types:
 ```cpp
- // mat4
+// mat4
 void TemplatedUniformWrapper<glm::mat4>::SetUniform(unsigned int shaderProgram) const
 {
 	GLuint uniformIntId = glGetUniformLocation(shaderProgram, m_uniformName.c_str());
