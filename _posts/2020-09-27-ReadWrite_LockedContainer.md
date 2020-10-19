@@ -52,6 +52,7 @@ public:
         WriteContainer(T& data, std::shared_mutex& mutex) : m_lock(mutex), m_data(data) {};
         T& operator->() { return m_data; };
         T& operator*() { return m_data; };
+        void operator=(const T& val) { m_data = val; };
     private:
         T& m_data;
         std::unique_lock<std::shared_mutex> m_lock;
