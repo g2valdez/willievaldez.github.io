@@ -63,4 +63,41 @@ FragColor = color * attenuation;
 
 ```
 
+Heres a snippet from a game I'm messing around with. In this case, the game is 2D, but the same principles apply to a 3D point light. In this video, the source of the light is the main character.
+
 ![](/assets/img/binary_example.gif "example of binary attenuation in a 2d game")
+
+## Linear Attenuation
+This is the simplest form of attenuation. If you are within the radius of the light, your brightness is 1.0, if you are outside the radius, brightness is 0.0;
+
+![](/assets/img/linear_function.png "distance will decrease linearly until reaching 0 at the light radius of 5")
+
+This is pretty easy to implement. Iterate through all lights, if the fragment is within the radius of one of the lights, increment its attenuation factor (or brightness/intensity) by the intensity of the light source;
+
+```cpp
+float attenuation = 0.0f;
+for(int i = 0; i < numLights; i++)
+{
+	PointLight light = lights[i];
+	float distToLight = distance(fragVert, light.pos);
+
+	// linear attenuation
+	float linearAttenuation = 1.0f - (distToLight/light.radius);
+	if (linearAttenuation < 0.0f)
+	{
+		linearAttenuation = 0.0f;
+	}
+	attenuation += linearAttenuation;
+}
+if (attenuation > 1.0f)
+{
+	attenuation = 1.0f;
+}
+
+FragColor = color * attenuation;
+
+```
+
+Heres a snippet from a game I'm messing around with. In this case, the game is 2D, but the same principles apply to a 3D point light. In this video, the source of the light is the main character.
+
+![](/assets/img/linear_example.gif "example of linear attenuation in a 2d game")
