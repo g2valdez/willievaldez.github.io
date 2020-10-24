@@ -2,7 +2,7 @@
 layout: post
 title: Class Registration During Static Init
 subtitle: Tricking C++ to do your bidding
-tags: [cpp, oop]
+tags: [C++, oop]
 ---
 
 Have you ever wanted to identify a class simply by supplying a string?

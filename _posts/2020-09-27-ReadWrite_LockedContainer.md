@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A Simple Read-Write Locked Container
-tags: [cpp, multithreading]
+tags: [C++, multithreading]
 ---
 
 ## Thread Contention in C++

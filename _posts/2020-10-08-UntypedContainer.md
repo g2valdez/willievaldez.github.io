@@ -2,7 +2,7 @@
 layout: post
 title: A Typeless Container
 subtitle: For when you sometimes wish C++ was a little more like JavaScript
-tags: [cpp, oop]
+tags: [C++, oop]
 ---
 Do silly constructs like "classes" sometimes get in the way of your programming? Are loosely typed languages "too loose" for you? Well boy, do I have a blog post for you! I was fiddling around with my OpenGL game engine and decided to make a container that can store and run custom functions on any object type.
 
